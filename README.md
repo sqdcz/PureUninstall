@@ -21,23 +21,40 @@
 | 按需提权 | 非管理员时顶部横幅提示，一键 UAC 重启（便携版和未来商店版通用） |
 | 更新检查 | 检查 GitHub Releases 最新版本（地址可在设置里改） |
 
+## 下载
+
+| 版本 | 文件 | 说明 |
+|---|---|---|
+| 便携版 | `PureUninstall-0.1.2-x64-portable.zip`（约 82 MB） | 解压即用，**无需安装任何运行时**；整个文件夹拷到 U 盘也能跑 |
+| 商店版 | `PureUninstall-0.1.2-x64-store.msix`（约 11 MB） | 微软商店安装包，运行时由商店分发 |
+
+> ⚠️ v0.1.1 便携版有启动缺陷（发布目录漏拷 `.xbf` / `.pri`，表现为双击无窗口），**请勿使用**，直接用 v0.1.2。
+
 ## 使用
 
-1. 解压 `dist/纯净卸载_v0.1.1_x64_便携版.zip`
+1. 解压便携版 zip（**必须完整解压**，只拷单个 exe 会启动失败）
 2. 运行 `PureUninstall.exe`（建议右键「以管理员身份运行」，否则系统位置清理会失败）
 3. 列表页选中软件 → 「卸载」/「强制删除」/「加入批量队列」
 
 备份位于 `%LOCALAPPDATA%\PureUninstall\Backups\`，可在「备份还原」页还原或删除。
+异常日志位于 `%LOCALAPPDATA%\PureUninstall\crash.log`。
 
 ## 从源码构建
 
 需要 .NET 8 SDK（x64）：
 
 ```bash
-dotnet build src/PureUninstall.App/PureUninstall.App.csproj -c Release
-dotnet publish src/PureUninstall.App/PureUninstall.App.csproj -c Release
-# 产物：src/PureUninstall.App/bin/Release/net8.0-windows10.0.19041.0/win-x64/publish/
+# 便携版（自包含，零依赖）
+dotnet publish src/PureUninstall.App/PureUninstall.App.csproj -c Release -r win-x64 --self-contained true -o dist/PureUninstall-portable
+
+# 商店 MSIX（先把 store/Package.appxmanifest 拷到工程根目录，构建完移回）
+dotnet build src/PureUninstall.App/PureUninstall.App.csproj -c Release -p:StoreBuild=true
 ```
+
+> 便携版曾经踩过的坑：`dotnet publish` 默认不把编译后的 XAML（`.xbf`）和应用 PRI 拷进发布目录，
+> 缺了它们启动即抛 `Cannot locate resource ... themeresources.xaml`、窗口不显示。
+> 工程里的 `CopyXamlResourcesToPublish` 目标已修复，改发布流程后请确认产物含
+> `PureUninstall.pri` 与 7 个 `.xbf`。
 
 冒烟测试（不删任何东西，只枚举和扫描）：
 
