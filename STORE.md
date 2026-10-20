@@ -1,7 +1,7 @@
 # 微软应用商店上架指南（纯净卸载）
 
 本项目已具备完整的 MSIX 打包管线，本文件是上架 Partner Center 的完整流程。
-**需要你本人完成的部分只有两步：预留应用名、拿 Publisher CN**（其余我已准备好）。
+**应用身份已配置完成**（2026-10-20）：Identity `31096ADE.4E53098C59DDDA` / Publisher `CN=EDFD9F3C-211C-42CA-86B9-3A9E5BEEEBC`，直接构建即可用于提交。
 
 ---
 
@@ -16,19 +16,19 @@
    
    > 这两个值必须一字不差地写进 `Package.appxmanifest`，否则认证直接失败。
 
-## 第 2 步：替换占位符（把 CN 发我，或自己改）
+## 第 2 步：应用标识（✅ 已完成）
 
-编辑 `src/PureUninstall.App/Package.appxmanifest`：
+`Package.appxmanifest` 已写入 Partner Center 的真实身份：
 
 ```xml
 <Identity
-    Name="PureUninstall"                          <!-- 改成你的包标识名 -->
-    Publisher="CN=3C8B9F2A-1234-4E5F-9ABC-..."    <!-- 改成 Partner Center 给的 CN -->
+    Name="31096ADE.4E53098C59DDDA"
+    Publisher="CN=EDFD9F3C-211C-42CA-86B9-3A9E5BEEEBC"
     Version="0.1.1.0"
     ProcessorArchitecture="x64" />
 ```
 
-同时把 `PublisherDisplayName` 确认为「衰气的船只」。
+> 如果以后改了应用名/重新预留，用 `set-publisher.ps1 -Publisher "CN=..." -IdentityName "..."` 一键重写。
 
 ## 第 3 步：构建商店包
 
@@ -47,27 +47,16 @@ dotnet build src/PureUninstall.App -c Release --no-incremental `
 产物：`src/PureUninstall.App/AppPackages/PureUninstall.App_0.1.1.0_x64_Test/PureUninstall.App_0.1.1.0_x64.msix`
 （当前仓库里已有一份**占位身份 + 未签名**的验证包，证明管线可用。）
 
-## 第 4 步：签名（二选一）
+## 第 4 步：签名（一键脚本）
 
-### 方案 A：让商店重签（推荐先试）
-Partner Center 接受上传后由微软用商店身份重签。直接用第 3 步产出的**未签名包**上传，若被拒再走方案 B。
+```powershell
+# 前置：winget install Microsoft.WindowsSDK.10.0.26100 --source winget
+.\sign-msix.ps1
+```
 
-### 方案 B：本地签名（需要 signtool）
-1. 安装签名工具（二选一）：
-   - `winget install Microsoft.WindowsSDK.10.0.26100`（装完 signtool 在 `C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\`）
-   - 或安装 VS 2022 的「使用 C++ 的桌面开发」工作负载
-2. 生成与 Publisher CN 匹配的自签名证书：
-   ```powershell
-   $cert = New-SelfSignedCertificate -Type Custom -Subject "CN=<你的Publisher CN>" `
-     -KeyUsage DigitalSignature -CertStoreLocation Cert:\CurrentUser\My
-   $pwd = ConvertTo-SecureString -String "pureuninstall" -Force -AsPlainText
-   Export-PfxCertificate -Cert $cert -FilePath "$env:USERPROFILE\PureUninstall.pfx" -Password $pwd
-   ```
-3. 签名：
-   ```powershell
-   & "<signtool路径>\signtool.exe" sign /fd SHA256 /a /f "$env:USERPROFILE\PureUninstall.pfx" `
-     /p pureuninstall "<msix路径>\PureUninstall.App_0.1.1.0_x64.msix"
-   ```
+脚本会自动：定位 signtool → 创建/复用与 Publisher CN 匹配的自签名证书（PFX 导出到 `%USERPROFILE%\PureUninstall.pfx`，密码 `pureuninstall`）→ 签名（带时间戳，失败则退而不带）→ 验证。
+
+不想本地签名也可以：**先拿未签名包直接上传**（`dist\PureUninstall-0.1.1-x64-store-unsigned.msix` 就是当前产物），Partner Center 接收时会用商店身份重签；若被拒再跑上面的脚本。
 
 ## 第 5 步：Partner Center 提交
 
