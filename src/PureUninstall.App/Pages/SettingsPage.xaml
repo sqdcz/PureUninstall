@@ -1,0 +1,70 @@
+<Page
+    x:Class="PureUninstall.App.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer Padding="24" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="14" MaxWidth="640">
+            <TextBlock Text="设置" FontSize="18" FontWeight="SemiBold" />
+
+            <!-- appearance -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="外观" FontWeight="SemiBold" />
+                    <RadioButton x:Name="ThemeDefault" Content="跟随系统" GroupName="Theme" Tag="Default" Checked="OnThemeChanged" />
+                    <RadioButton x:Name="ThemeLight" Content="浅色" GroupName="Theme" Tag="Light" Checked="OnThemeChanged" />
+                    <RadioButton x:Name="ThemeDark" Content="深色" GroupName="Theme" Tag="Dark" Checked="OnThemeChanged" />
+                </StackPanel>
+            </Border>
+
+            <!-- uninstall options -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="卸载与清理" FontWeight="SemiBold" />
+                    <CheckBox x:Name="QuietBox" Content="安静卸载（无人值守，失败时自动回退常规卸载）"
+                              Checked="OnOptionChanged" Unchecked="OnOptionChanged" />
+                    <CheckBox x:Name="AggressiveBox" Content="深度扫描（额外搜索数据目录，更慢但更全）"
+                              Checked="OnOptionChanged" Unchecked="OnOptionChanged" />
+                    <CheckBox x:Name="BackupBox" Content="删除前自动备份（注册表导出 .reg + 文件快照）"
+                              Checked="OnOptionChanged" Unchecked="OnOptionChanged" />
+                </StackPanel>
+            </Border>
+
+            <!-- permissions -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="权限" FontWeight="SemiBold" />
+                    <TextBlock x:Name="AdminStateText" Opacity="0.75" />
+                    <Button x:Name="ElevateButton" Content="以管理员身份重启" Click="OnElevateClick" />
+                </StackPanel>
+            </Border>
+
+            <!-- updates -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="更新" FontWeight="SemiBold" />
+                    <TextBlock x:Name="VersionText" Opacity="0.75" />
+                    <TextBox x:Name="UpdateUrlBox" PlaceholderText="更新检查地址（GitHub releases API）" LostFocus="OnUpdateUrlLostFocus" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="立即检查" Click="OnCheckUpdateClick" />
+                        <TextBlock x:Name="UpdateStatusText" VerticalAlignment="Center" TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- about -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="关于" FontWeight="SemiBold" />
+                    <TextBlock Text="纯净卸载 PureUninstall — 开源深度卸载工具" Opacity="0.8" />
+                    <TextBlock Text="卸载后自动清理：文件 / 注册表 / 计划任务 / 服务 / 启动项 / 防火墙规则 / WMI 订阅"
+                               Opacity="0.6" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,18 @@
+## .NET / Visual Studio
+bin/
+obj/
+*.user
+*.suo
+.vs/
+[Dd]ebug/
+[Rr]elease/
+publish/
+TestResults/
+
+## build output / local data
+dist/
+*.log
+
+## OS
+Thumbs.db
+desktop.ini

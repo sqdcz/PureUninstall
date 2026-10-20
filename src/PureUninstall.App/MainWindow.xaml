@@ -1,0 +1,52 @@
+<Window
+    x:Class="PureUninstall.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="纯净卸载">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- admin banner -->
+        <Border x:Name="AdminBanner" Grid.Row="0" Background="#FFF3CD" Padding="16,8" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="当前不是管理员模式：清理 Program Files、HKLM、服务、计划任务等系统位置会失败"
+                           VerticalAlignment="Center" Foreground="#664D03" TextWrapping="Wrap" />
+                <Button Grid.Column="1" Click="OnRestartAdmin" Margin="8,0,0,0">以管理员身份重启</Button>
+            </Grid>
+        </Border>
+
+        <NavigationView x:Name="NavView" Grid.Row="1" PaneTitle="纯净卸载" IsBackButtonVisible="Collapsed"
+                        SelectionChanged="OnNavSelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="软件列表" Tag="apps" IsSelected="True">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE74D;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="批量卸载" Tag="batch">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8C8;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="备份还原" Tag="backups">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE81C;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="设置" Tag="settings">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE713;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="ContentFrame" />
+        </NavigationView>
+    </Grid>
+</Window>
