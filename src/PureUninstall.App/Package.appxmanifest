@@ -1,21 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   纯净卸载 MSIX 打包清单（微软商店版）
   ⚠️ Publisher 当前是占位符。正式提交前必须替换为 Partner Center 预留应用名后
   给出的 Publisher CN（形如 CN=3C8B9F2A-1234-4E5F-9ABC-0123456789AB），
   否则商店会拒绝（标识不匹配）。替换后需用匹配该 CN 的证书签名。
 -->
-<Package
-    xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-    xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
-    xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-    IgnorableNamespaces="uap uap3 rescap">
-  <Identity
-      Name="PureUninstall"
-      Publisher="CN=PureUninstall-Placeholder"
-      Version="0.1.1.0"
-      ProcessorArchitecture="x64" />
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap3 rescap">
+  <Identity Name="31096ADE.4E53098C59DDDA" Publisher="CN=EDFD9F3C-211C-42CA-86B9-3A9E5BEEEBC" Version="0.1.1.0" ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>纯净卸载</DisplayName>
     <PublisherDisplayName>衰气的船只</PublisherDisplayName>
@@ -32,15 +23,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="PureUninstall.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements
-          DisplayName="纯净卸载"
-          Description="深度卸载工具"
-          BackgroundColor="transparent"
-          Square150x150Logo="Assets\Square150x150Logo.png"
-          Square44x44Logo="Assets\Square44x44Logo.png">
-        <uap:DefaultTile
-            Wide310x150Logo="Assets\Wide310x150Logo.png"
-            Square310x310Logo="Assets\Square310x310Logo.png" />
+      <uap:VisualElements DisplayName="纯净卸载" Description="深度卸载工具" BackgroundColor="transparent" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\Square310x310Logo.png" />
       </uap:VisualElements>
     </Application>
   </Applications>
