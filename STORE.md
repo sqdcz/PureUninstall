@@ -1,7 +1,7 @@
 # 微软应用商店上架指南（纯净卸载）
 
 本项目已具备完整的 MSIX 打包管线，本文件是上架 Partner Center 的完整流程。
-**应用身份已配置完成**（2026-10-20）：Identity `31096ADE.4E53098C59DDDA` / Publisher `CN=EDFD9F3C-211C-42CA-86B9-3A9E5BEEEBC`，直接构建即可用于提交。
+**应用身份已配置完成**（2026-10-20）：Identity `31096ADE.453098C59DDDA` / Publisher `CN=EDFD9F3C-211F-42CA-B6B9-3A9E55BEEEBC`，直接构建即可用于提交。
 
 ---
 
@@ -22,9 +22,9 @@
 
 ```xml
 <Identity
-    Name="31096ADE.4E53098C59DDDA"
-    Publisher="CN=EDFD9F3C-211C-42CA-86B9-3A9E5BEEEBC"
-    Version="0.1.1.0"
+    Name="31096ADE.453098C59DDDA"
+    Publisher="CN=EDFD9F3C-211F-42CA-B6B9-3A9E55BEEEBC"
+    Version="0.1.2.0"
     ProcessorArchitecture="x64" />
 ```
 
@@ -32,20 +32,28 @@
 
 ## 第 3 步：构建商店包
 
+清单文件放在 `src/PureUninstall.App/store/Package.appxmanifest`，构建前拷到工程根目录，
+构建完再移回，避免便携版构建时被 MSIX 工具链干扰：
+
 ```powershell
-# 便携版（GitHub Releases 用，自带运行时）
-dotnet publish src/PureUninstall.App -c Release
+cd src\PureUninstall.App
+Copy-Item store\Package.appxmanifest Package.appxmanifest -Force
+
+# 便携版（GitHub Releases 用，自带运行时，零依赖）
+dotnet publish src/PureUninstall.App -c Release -r win-x64 --self-contained true -o dist\PureUninstall-portable
 
 # 商店 MSIX 包（依赖商店分发的 Windows App Runtime，体积小）
-dotnet build src/PureUninstall.App -c Release --no-incremental `
-  -p:WindowsPackageType=MSIX `
-  -p:WindowsAppSDKSelfContained=false `
-  -p:AppxPackageSigningEnabled=false `
-  -p:GenerateAppxPackageOnBuild=true
+dotnet build src\PureUninstall.App -c Release --no-incremental -p:StoreBuild=true
+
+Remove-Item Package.appxmanifest -Force
 ```
 
-产物：`src/PureUninstall.App/AppPackages/PureUninstall.App_0.1.1.0_x64_Test/PureUninstall.App_0.1.1.0_x64.msix`
-（当前仓库里已有一份**占位身份 + 未签名**的验证包，证明管线可用。）
+产物：`src/PureUninstall.App/AppPackages/PureUninstall.App_0.1.2.0_x64_Test/PureUninstall.App_0.1.2.0_x64.msix`
+
+> ⚠️ 便携版坑位记录：`dotnet publish` 默认**不会**把编译后的 XAML（`.xbf`）和本应用 PRI
+> 拷进发布目录，缺了它们启动时抛 `Cannot locate resource ... themeresources.xaml`，
+> 表现就是"双击没反应、没有窗口"。工程里 `CopyXamlResourcesToPublish` 目标已修复，
+> 改发布流程后请确认产物里有 `PureUninstall.pri` 和 7 个 `.xbf`。
 
 ## 第 4 步：签名（一键脚本）
 
