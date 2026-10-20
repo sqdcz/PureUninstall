@@ -5,10 +5,10 @@
 #
 # 用法（仓库根目录下）：
 #   .\sign-msix.ps1
-#   .\sign-msix.ps1 -MsixPath "dist\PureUninstall-0.1.1-x64-store.msix"
+#   .\sign-msix.ps1 -MsixPath "dist\PureUninstall-0.1.2-x64-store.msix"
 
 param(
-    [string]$MsixPath = "src\PureUninstall.App\AppPackages\PureUninstall.App_0.1.1.0_x64_Test\PureUninstall.App_0.1.1.0_x64.msix",
+    [string]$MsixPath = "src\PureUninstall.App\AppPackages\PureUninstall.App_0.1.2.0_x64_Test\PureUninstall.App_0.1.2.0_x64.msix",
     [string]$Publisher = "CN=EDFD9F3C-211F-42CA-B6B9-3A9E55BEEEBC"
 )
 
