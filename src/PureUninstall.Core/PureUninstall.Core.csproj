@@ -8,7 +8,8 @@
     <AssemblyName>PureUninstall.Core</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+    <!-- 不引用 Microsoft.WindowsDesktop.App：引擎只用到注册表/WMI/COM/SCM，
+         引用它会把 WPF+WinForms 运行时一起打进自包含包（多出约 50MB） -->
     <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.1" />
   </ItemGroup>
