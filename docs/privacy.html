@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>隐私政策 — 纯净卸载 PureUninstall</title>
+<style>
+  :root { --fg:#1a2332; --muted:#5b6b7f; --accent:#0f766e; --line:#e3e9f0; --bg:#ffffff; --soft:#f6f9fb; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:"Segoe UI","Microsoft YaHei",-apple-system,sans-serif; color:var(--fg); background:var(--bg); line-height:1.75; font-size:15px; }
+  .wrap { max-width:820px; margin:0 auto; padding:48px 24px 80px; }
+  header { border-bottom:2px solid var(--accent); padding-bottom:20px; margin-bottom:36px; }
+  h1 { font-size:26px; font-weight:700; letter-spacing:.5px; }
+  .sub { color:var(--muted); font-size:13px; margin-top:6px; }
+  h2 { font-size:17px; font-weight:600; margin:36px 0 12px; color:var(--accent); }
+  h2 .num { display:inline-block; min-width:26px; color:var(--muted); font-weight:700; }
+  p { margin:10px 0; color:#2c3a4d; }
+  ul { margin:10px 0 10px 22px; }
+  li { margin:6px 0; color:#2c3a4d; }
+  .box { background:var(--soft); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:6px; padding:14px 18px; margin:16px 0; }
+  .box p { margin:4px 0; }
+  code { background:#eef3f7; border-radius:4px; padding:1px 6px; font-size:13px; font-family:Consolas,monospace; }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:14px; }
+  th, td { border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top; }
+  th { background:var(--soft); font-weight:600; width:32%; }
+  .en { margin-top:56px; padding-top:28px; border-top:1px dashed var(--line); }
+  .en h2 { color:#33455c; }
+  .en p, .en li { color:#43566d; }
+  footer { margin-top:48px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:12.5px; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>纯净卸载（PureUninstall）隐私政策</h1>
+  <div class="sub">生效日期：2026 年 10 月 21 日 · 最近更新：2026 年 10 月 21 日 · 版本 1.0</div>
+</header>
+
+<div class="box">
+  <p><strong>摘要：纯净卸载是一款完全本地运行的 Windows 系统工具。我们不收集、不上传、不存储您的任何个人信息。软件唯一可能发生的网络活动是您可随时关闭的「更新检查」，除此之外没有任何数据会离开您的电脑。</strong></p>
+</div>
+
+<h2><span class="num">1.</span>我们是谁</h2>
+<p>纯净卸载（PureUninstall，下称"本软件"）是一款用于卸载 Windows 应用程序并清理卸载残留的开源系统工具，由独立开发者（发布者：衰气的船只）开发并维护。本软件通过 GitHub（开源仓库）与微软应用商店分发。</p>
+
+<h2><span class="num">2.</span>我们不收集的信息</h2>
+<p>本软件<strong>不包含</strong>任何用户行为追踪、使用情况分析、崩溃遥测上报、广告 SDK 或第三方统计组件。具体而言，我们不会收集或接触：</p>
+<ul>
+  <li>您的姓名、邮箱、手机号等任何身份信息；</li>
+  <li>您安装的软件清单、文件内容或任何系统信息（这些数据仅在本机内存中处理，详见第 3 节）；</li>
+  <li>设备标识符、IP 地址的地理位置、使用时长、点击行为等遥测数据；</li>
+  <li>本软件崩溃时生成的日志仅写入您本机磁盘，不会发送给任何人。</li>
+</ul>
+
+<h2><span class="num">3.</span>应用权限与本地数据处理说明</h2>
+<p>为完成卸载与残留清理功能，本软件需要在本地读取以下系统信息，<strong>全部处理均在本机完成，不会上传至任何服务器</strong>：</p>
+<table>
+  <tr><th>读取的数据</th><th>用途</th></tr>
+  <tr><td>已安装软件列表（注册表卸载项、UWP 应用包）</td><td>在软件列表中展示，供您选择卸载目标</td></tr>
+  <tr><td>残留扫描范围内的文件目录与注册表项</td><td>在卸载后识别残留文件、注册表、计划任务、服务、启动项等，并在您确认后清理</td></tr>
+</table>
+<p>本软件以标准用户权限启动，不会在启动时要求管理员权限。仅当您主动点击「卸载」「清理」等操作时，才通过 Windows UAC（用户账户控制）申请提权；提权范围仅限于完成该次卸载清理所必需的系统操作。您可以在任何时候拒绝提权，软件将退回标准权限模式。</p>
+
+<h2><span class="num">4.</span>网络活动（唯一的网络请求）</h2>
+<p>本软件仅在您<strong>未手动关闭</strong>"更新检查"功能时，访问一个用于获取最新版本号的接口：</p>
+<table>
+  <tr><th>项目</th><th>说明</th></tr>
+  <tr><td>请求地址</td><td>默认为 GitHub Releases 公开接口（<code>api.github.com</code>），可在软件「设置」中修改或清空</td></tr>
+  <tr><td>发送的内容</td><td>仅一个普通的 HTTPS 版本查询请求；软件本身不附带任何用户标识、设备信息或使用数据</td></tr>
+  <tr><td>返回的内容</td><td>最新版本号字符串，仅用于在设置页提示"发现新版本"</td></tr>
+  <tr><td>如何关闭</td><td>在「设置」中清空"更新检查地址"并保存，此后本软件不再发起任何网络请求</td></tr>
+</table>
+<p>与所有互联网服务一样，GitHub 作为托管方会按其自身隐私政策记录服务器端访问日志（如 IP 地址）。本软件无法访问、也不会获取这些日志。除此之外，本软件不具备任何网络通信能力。</p>
+
+<h2><span class="num">5.</span>本地数据存储位置</h2>
+<p>本软件在以下位置保存运行所需数据，<strong>全部位于您的电脑本地</strong>，您可随时查看或删除：</p>
+<table>
+  <tr><th>位置</th><th>内容</th></tr>
+  <tr><td><code>%LOCALAPPDATA%\PureUninstall\Backups\</code></td><td>卸载清理前的自动备份（注册表 .reg 导出与文件快照），用于一键还原</td></tr>
+  <tr><td><code>%LOCALAPPDATA%\PureUninstall\settings.json</code></td><td>您的软件设置（主题、扫描选项等）</td></tr>
+  <tr><td><code>%LOCALAPPDATA%\PureUninstall\IconCache\</code></td><td>已安装软件的图标缓存</td></tr>
+  <tr><td><code>%LOCALAPPDATA%\PureUninstall\crash.log</code></td><td>意外错误的本地诊断日志（仅写入本机，不上传）</td></tr>
+</table>
+
+<h2><span class="num">6.</span>第三方服务</h2>
+<p>本软件的分发与更新检查涉及以下第三方，其数据处理受各自隐私政策约束：</p>
+<ul>
+  <li><strong>GitHub</strong>（微软旗下）：托管开源仓库、软件更新版本信息（<a href="https://docs.github.com/zh/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub 隐私声明</a>）；</li>
+  <li><strong>微软应用商店</strong>：应用分发渠道（<a href="https://privacy.microsoft.com/zh-cn/privacystatement" target="_blank" rel="noopener">微软隐私声明</a>）。</li>
+</ul>
+<p>除上述第 4 节所述更新检查外，本软件不与任何第三方服务通信，不集成任何第三方 SDK。</p>
+
+<h2><span class="num">7.</span>儿童隐私</h2>
+<p>本软件不面向儿童提供服务，也不会有意收集任何年龄用户的个人信息。由于本软件不收集任何个人数据，因此不存在处理儿童数据的风险。</p>
+
+<h2><span class="num">8.</span>数据安全</h2>
+<p>本软件遵循"最小必要"原则：仅读取完成卸载清理所必需的系统信息；所有删除操作均需用户逐项确认；删除前默认创建本地备份；系统关键路径与关键服务内置黑名单保护，防止误删导致系统故障。</p>
+
+<h2><span class="num">9.</span>隐私政策的变更</h2>
+<p>若本软件的功能变化导致数据处理方式调整，我们会更新本页面并同步修订"最近更新"日期。重大变更将通过 GitHub 仓库 Release Notes 说明。建议您定期访问 <a href="https://sqdcz.github.io/PureUninstall/privacy.html" target="_blank">本页面</a> 查看最新版本。</p>
+
+<h2><span class="num">10.</span>联系我们</h2>
+<p>如对本隐私政策有任何疑问、意见或请求，请通过以下方式联系：</p>
+<ul>
+  <li>GitHub Issues：<a href="https://github.com/sqdcz/PureUninstall/issues" target="_blank">github.com/sqdcz/PureUninstall/issues</a></li>
+  <li>开源仓库（可审计全部源代码）：<a href="https://github.com/sqdcz/PureUninstall" target="_blank">github.com/sqdcz/PureUninstall</a></li>
+</ul>
+
+<div class="en">
+<h2>Privacy Policy — PureUninstall</h2>
+<p><strong>Summary:</strong> PureUninstall is a fully local Windows utility. We do not collect, transmit, or store any of your personal information. The only optional network activity is a user-disableable update check; no other data ever leaves your computer.</p>
+<p><strong>No data collection:</strong> The app contains no analytics, telemetry, advertising SDKs, or crash reporting. Installed-program lists, registry data, and file scans are processed locally in memory only.</p>
+<p><strong>Optional update check:</strong> When enabled (default), the app queries a version endpoint (GitHub Releases API by default, configurable or clearable in Settings) to display "new version available". No user identifiers are attached. Clearing the URL in Settings disables all network access.</p>
+<p><strong>Local storage:</strong> Backups (<code>%LOCALAPPDATA%\PureUninstall\Backups\</code>), settings, icon cache, and crash logs are stored locally only.</p>
+<p><strong>Elevation:</strong> The app launches as a standard user and requests elevation via UAC only when you explicitly initiate an uninstall or cleanup action.</p>
+<p><strong>Third parties:</strong> GitHub (hosting/update metadata) and Microsoft Store (distribution). No other third-party SDKs are integrated.</p>
+<p><strong>Contact:</strong> <a href="https://github.com/sqdcz/PureUninstall/issues">github.com/sqdcz/PureUninstall/issues</a></p>
+</div>
+
+<footer>
+  纯净卸载 PureUninstall · 开源地址：github.com/sqdcz/PureUninstall · 本隐私政策随软件版本同步维护
+</footer>
+
+</div>
+</body>
+</html>
