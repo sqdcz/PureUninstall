@@ -16,3 +16,6 @@ dist/
 ## OS
 Thumbs.db
 desktop.ini
+
+## MSIX build output
+AppPackages/
