@@ -1,4 +1,4 @@
-# sign-msix.ps1 - 用与 Publisher CN 匹配的自签名证书给 MSIX 签名
+﻿# sign-msix.ps1 - 用与 Publisher CN 匹配的自签名证书给 MSIX 签名
 #
 # 前置：已安装 Windows SDK（含 signtool）：
 #   winget install Microsoft.WindowsSDK.10.0.26100
@@ -19,12 +19,15 @@ if (-not (Test-Path $MsixPath)) {
     exit 1
 }
 
-# 1. locate signtool (x64)
-$signtool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin" -Recurse -Filter "signtool.exe" -ErrorAction SilentlyContinue |
-    Where-Object { $_.FullName -match "\\x64\\" } |
-    Select-Object -First 1
+# 1. locate signtool (x64; the Windows SDK installs it under bin\<ver>\x64,
+#    the App Certification Kit also ships a copy)
+$signtool = @(
+    "C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe"
+) + @(Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin" -Recurse -Filter "signtool.exe" -ErrorAction SilentlyContinue |
+    Where-Object { $_.FullName -match "\\x64\\" } | Select-Object -ExpandProperty FullName) |
+    Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $signtool) {
-    Write-Error "找不到 signtool.exe。请先安装 Windows SDK：winget install Microsoft.WindowsSDK.10.0.26100"
+    Write-Error "找不到 signtool.exe。请安装 Windows SDK 或 App Certification Kit：winget install Microsoft.WindowsSDK.10.0.26100 --source winget"
     exit 1
 }
 Write-Host "signtool: $($signtool.FullName)"
@@ -42,15 +45,16 @@ if (-not $cert) {
 }
 Write-Host "证书 thumbprint: $($cert.Thumbprint)"
 
-# 3. sign + verify
-& $signtool.FullName sign /fd SHA256 /sha $cert.Thumbprint /tr "http://timestamp.digicert.com" /td SHA256 $MsixPath
-if ($LASTEXITCODE -ne 0) {
-    Write-Warning "带时间戳签名失败（可能无外网），改用不带时间戳签名"
-    & $signtool.FullName sign /fd SHA256 /sha $cert.Thumbprint $MsixPath
+# 3. sign + verify (use the PFX; /sha is not supported by the legacy cert-kit signtool)
+$pfx = "$env:USERPROFILE\PureUninstall.pfx"
+if (-not (Test-Path $pfx)) {
+    Write-Error "找不到 PFX：$pfx（应在上一步自动导出）"
+    exit 1
 }
+& $signtool sign /fd SHA256 /f $pfx /p pureuninstall $MsixPath
 Write-Host ""
 Write-Host "验证签名："
-& $signtool.FullName verify /pa $MsixPath
+& $signtool verify /pa $MsixPath
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host ""

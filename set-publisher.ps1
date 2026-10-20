@@ -1,4 +1,4 @@
-# set-publisher.ps1 - 把 Partner Center 的应用标识写进 Package.appxmanifest
+﻿# set-publisher.ps1 - 把 Partner Center 的应用标识写进 Package.appxmanifest
 #
 # 用法（在仓库根目录 PureUninstall\ 下执行）：
 #   .\set-publisher.ps1 -Publisher "CN=3C8B9F2A-1234-4E5F-9ABC-0123456789AB" -IdentityName "PureUninstall"
