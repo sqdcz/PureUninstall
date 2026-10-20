@@ -4,27 +4,59 @@
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <UseWinUI>true</UseWinUI>
-    <WindowsPackageType>None</WindowsPackageType>
-    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-    <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <RootNamespace>PureUninstall.App</RootNamespace>
     <AssemblyName>PureUninstall</AssemblyName>
-    <Version>0.1.0</Version>
+    <Version>0.1.2</Version>
     <ApplicationIcon>..\..\design\icons\app.ico</ApplicationIcon>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Platforms>x64</Platforms>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+
+    <!-- 默认 = 便携版：未打包 + 自带运行时；不挂 MSIX 工具链
+         （挂上 BuildTools 后 publish 不再输出 resources.pri，WinUI 起不来窗口） -->
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <EnableMsixTooling>false</EnableMsixTooling>
+    <!-- 只带中英文资源，省掉 80 多个用不到的语言目录（便携版体积砍掉一半以上） -->
+    <SatelliteResourceLanguages>zh-CN;en-US</SatelliteResourceLanguages>
   </PropertyGroup>
+
+  <!-- 商店版：dotnet build -p:StoreBuild=true（见 STORE.md） -->
+  <PropertyGroup Condition="'$(StoreBuild)'=='true'">
+    <WindowsPackageType>MSIX</WindowsPackageType>
+    <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.9169" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(StoreBuild)'=='true'">
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.9169" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PureUninstall.Core\PureUninstall.Core.csproj" />
   </ItemGroup>
-</Project>
 
+  <!-- dotnet publish 默认不会把编译后的 XAML(.xbf) 和本应用 PRI 拷进发布目录，
+       缺了它们 WinUI 会抛 "Cannot locate resource ... themeresources.xaml"，窗口起不来。
+       这里在 Publish 之后手动补上（排除 embed/ 变体，与非打包版布局保持一致）。 -->
+  <Target Name="CopyXamlResourcesToPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <_XbfFile Include="$(IntermediateOutputPath)**\*.xbf"
+                Exclude="$(IntermediateOutputPath)embed\**\*.xbf" />
+      <_AppPriFile Include="$(OutDir)$(AssemblyName).pri" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_XbfFile)"
+          DestinationFiles="@(_XbfFile->'$(PublishDir)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(_AppPriFile)"
+          DestinationFolder="$(PublishDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>
