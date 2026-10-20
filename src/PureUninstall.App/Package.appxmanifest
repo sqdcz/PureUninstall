@@ -6,7 +6,7 @@
   否则商店会拒绝（标识不匹配）。替换后需用匹配该 CN 的证书签名。
 -->
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap uap3 rescap">
-  <Identity Name="31096ADE.4E53098C59DDDA" Publisher="CN=EDFD9F3C-211C-42CA-86B9-3A9E5BEEEBC" Version="0.1.1.0" ProcessorArchitecture="x64" />
+  <Identity Name="31096ADE.453098C59DDDA" Publisher="CN=EDFD9F3C-211F-42CA-B6B9-3A9E55BEEEBC" Version="0.1.1.0" ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>纯净卸载</DisplayName>
     <PublisherDisplayName>衰气的船只</PublisherDisplayName>

@@ -9,7 +9,7 @@
 
 param(
     [string]$MsixPath = "src\PureUninstall.App\AppPackages\PureUninstall.App_0.1.1.0_x64_Test\PureUninstall.App_0.1.1.0_x64.msix",
-    [string]$Publisher = "CN=EDFD9F3C-211C-42CA-86B9-3A9E5BEEEBC"
+    [string]$Publisher = "CN=EDFD9F3C-211F-42CA-B6B9-3A9E55BEEEBC"
 )
 
 $ErrorActionPreference = "Stop"
