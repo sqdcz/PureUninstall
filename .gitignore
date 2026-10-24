@@ -19,3 +19,6 @@ desktop.ini
 
 ## MSIX build output
 AppPackages/
+
+## 宣传片：成片走 Releases / B站，不进仓库（源工程在 D:\pu-promo）
+design/promo/*.mp4
