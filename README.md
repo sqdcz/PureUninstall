@@ -1,10 +1,13 @@
 # 纯净卸载 PureUninstall
 
+![纯净卸载](design/promo/cover-1920x1080.png)
+
 现代化 Windows 深度卸载工具 —— Geek Uninstaller 的重写版。卸载软件后自动清理**文件、注册表、计划任务、服务、启动项、防火墙规则、WMI 事件订阅**七类残留，支持批量卸载、删除前自动备份与一键还原。
 
 - 界面：WinUI 3（Fluent 设计、深浅色主题、Mica 就绪）
 - 架构：C# / .NET 8，`PureUninstall.Core`（纯逻辑库）+ `PureUninstall.App`（WinUI 3 界面）
 - 平台：Windows 10 1809+ / x64，未打包模式自带 Windows App Runtime，**拷贝即用免安装**
+- 宣传片：[200 秒 · 1080p](design/promo/STORYBOARD.md)（分镜与制作方式见该文件）
 
 ## 功能
 
