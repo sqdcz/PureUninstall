@@ -58,21 +58,15 @@ public sealed partial class AppsPage : Page
 
     private async Task LoadIconsAsync()
     {
-        // parallel extraction with limited concurrency (sequential would take minutes)
+        // 图标解析要读注册表/扫安装目录，必须并行 + 限流，否则一屏 150 个软件会卡很久
         using var gate = new SemaphoreSlim(8);
         var tasks = _all.Select(async vm =>
         {
             await gate.WaitAsync();
             try
             {
-                var iconPath = vm.Entry.DisplayIcon;
-                if (string.IsNullOrWhiteSpace(iconPath) && !string.IsNullOrWhiteSpace(vm.Entry.UninstallString))
-                {
-                    var (file, _) = Core.Services.Uninstaller.ParseCommand(vm.Entry.UninstallString);
-                    iconPath = file;
-                }
-
-                var png = await Task.Run(() => IconExtractor.GetIconFile(iconPath, 32));
+                // IconExtractor 内部已按 DisplayIcon → 卸载程序 → 安装目录主程序 → UWP 清单 logo 逐级回退
+                var png = await Task.Run(() => IconExtractor.GetIconFile(vm.Entry, 32));
                 if (png is null) return;
 
                 DispatcherQueue.TryEnqueue(() =>
