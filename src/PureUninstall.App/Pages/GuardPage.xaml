@@ -1,0 +1,108 @@
+<Page
+    x:Class="PureUninstall.App.Pages.GuardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Padding="24" RowSpacing="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 标题 -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="安装监控" FontSize="22" FontWeight="SemiBold" />
+                <TextBlock TextWrapping="Wrap" Opacity="0.7" Margin="0,6,20,0"
+                           Text="打开后盯着启动项、服务、计划任务这些位置。任何软件往系统里塞自启动，都会被当场记下来 —— 包括那些装完就把自己写进开机启动的推广组件。" />
+            </StackPanel>
+            <ToggleSwitch x:Name="MonitorSwitch" Grid.Column="1" VerticalAlignment="Top"
+                          Header="实时监控" OnContent="开" OffContent="关"
+                          Toggled="OnMonitorToggled" AutomationProperties.Name="实时监控" />
+        </Grid>
+
+        <!-- 状态条 -->
+        <Border x:Name="StatusBar" Grid.Row="1" Background="#F3F6FA" BorderBrush="#DCE3EC"
+                BorderThickness="1" CornerRadius="8" Padding="16,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Spacing="4">
+                    <TextBlock x:Name="StatusTitle" Text="未开启" FontWeight="SemiBold" />
+                    <TextBlock x:Name="StatusHint" FontSize="12" Opacity="0.65" TextWrapping="Wrap"
+                               Text="打开开关后，程序会每 2.5 秒检查一次系统里的自启动位置。装软件时保持这个页面在后台即可。" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <CheckBox x:Name="AutoRollbackBox" Content="自动撤销高风险项"
+                              ToolTipService.ToolTip="勾选后，监控到高风险项会自动删除。谨慎开启：正常软件的自启动也可能被判为高风险。"
+                              Click="OnAutoRollbackChanged" />
+                    <Button Content="重建基线" Click="OnResetBaseline" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 事件列表 -->
+        <Grid Grid.Row="2">
+            <ListView x:Name="EventList" SelectionMode="Single" Visibility="Collapsed">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="2,8" ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Background="{Binding RiskBg}" CornerRadius="4" Padding="8,2"
+                                    VerticalAlignment="Top" MinWidth="40" Margin="0,2,0,0">
+                                <TextBlock Text="{Binding RiskText}" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{Binding RiskFg}" HorizontalAlignment="Center" />
+                            </Border>
+
+                            <Border Grid.Column="1" Background="#F1F3F6" CornerRadius="4" Padding="7,2"
+                                    VerticalAlignment="Top" MinWidth="58" Margin="0,2,0,0">
+                                <TextBlock Text="{Binding KindText}" FontSize="11" HorizontalAlignment="Center" />
+                            </Border>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Command}" FontSize="11" Opacity="0.62"
+                                           TextTrimming="CharacterEllipsis" Margin="0,3,0,0" />
+                                <TextBlock Text="{Binding TimeText}" FontSize="10" Opacity="0.42" Margin="0,3,0,0" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <StackPanel x:Name="EmptyState" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10">
+                <FontIcon Glyph="&#xE7BA;" FontSize="36" Opacity="0.25" />
+                <TextBlock Text="还没有捕获到新项目" Opacity="0.6" />
+                <TextBlock FontSize="12" Opacity="0.45" TextAlignment="Center" MaxWidth="460"
+                           Text="打开监控后去装一个软件试试。如果它往系统里加了启动项或服务，这里会立刻出现。" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button x:Name="CleanButton" Content="撤销选中项" IsEnabled="False" Click="OnCleanClick"
+                        AutomationProperties.Name="撤销选中项" />
+                <Button Content="清空记录" Click="OnClearClick" />
+                <TextBlock x:Name="HintText" VerticalAlignment="Center" FontSize="11" Opacity="0.45"
+                           Margin="8,0,0,0"
+                           Text="撤销 = 删除这条自启动，不会卸载软件本体。" />
+            </StackPanel>
+            <TextBlock x:Name="CountText" HorizontalAlignment="Right" VerticalAlignment="Center"
+                       FontSize="12" Opacity="0.6" />
+        </Grid>
+    </Grid>
+</Page>
