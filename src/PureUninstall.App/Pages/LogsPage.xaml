@@ -1,0 +1,106 @@
+<Page
+    x:Class="PureUninstall.App.Pages.LogsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Padding="24" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="操作日志" FontSize="22" FontWeight="SemiBold" />
+                <TextBlock TextWrapping="Wrap" Opacity="0.7" Margin="0,6,20,0"
+                           Text="每次卸载、清理、备份、追踪都会记一条，按天存放在本地。出问题时把「诊断报告」导出来发给开发者，比一句话描述有用得多。" />
+            </StackPanel>
+            <Button Grid.Column="1" VerticalAlignment="Top" Click="OnOpenFolderClick">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon Glyph="&#xE838;" FontSize="14" />
+                    <TextBlock Text="打开日志目录" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- 工具条 -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="10">
+            <ComboBox x:Name="CategoryBox" Width="150" SelectionChanged="OnFilterChanged">
+                <ComboBoxItem Content="全部类别" IsSelected="True" />
+                <ComboBoxItem Content="卸载" />
+                <ComboBoxItem Content="清理" />
+                <ComboBoxItem Content="备份 / 还原" />
+                <ComboBoxItem Content="追踪" />
+                <ComboBoxItem Content="扫描" />
+                <ComboBoxItem Content="防护" />
+            </ComboBox>
+            <ComboBox x:Name="DaysBox" Width="130" SelectionChanged="OnFilterChanged">
+                <ComboBoxItem Content="今天" />
+                <ComboBoxItem Content="最近 7 天" IsSelected="True" />
+                <ComboBoxItem Content="最近 30 天" />
+            </ComboBox>
+            <Button Content="刷新" Click="OnRefreshClick" />
+            <Border Width="1" Background="#22000000" Margin="4,6" />
+            <Button Content="导出文本" Click="OnExportTextClick" />
+            <Button Content="导出 CSV" Click="OnExportCsvClick" />
+            <Button Content="导出 JSON" Click="OnExportJsonClick" />
+            <Button Content="诊断报告" Click="OnExportReportClick" Style="{StaticResource AccentButtonStyle}" />
+        </StackPanel>
+
+        <!-- 列表 -->
+        <Grid Grid.Row="2">
+            <ListView x:Name="LogList" SelectionMode="Single" IsItemClickEnabled="False">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="2,6" ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Background="#F0F2F6" CornerRadius="4" Padding="7,2"
+                                    VerticalAlignment="Top" MinWidth="64" Margin="0,2,0,0">
+                                <TextBlock Text="{Binding CategoryText}" FontSize="11"
+                                           HorizontalAlignment="Center" />
+                            </Border>
+
+                            <TextBlock Grid.Column="1" Text="{Binding ResultText}" FontSize="11"
+                                       VerticalAlignment="Top" Margin="0,5,0,0" MinWidth="34" Opacity="0.75" />
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock FontSize="13" TextWrapping="Wrap">
+                                    <Run Text="{Binding Action}" FontWeight="SemiBold" />
+                                    <Run Text="  " />
+                                    <Run Text="{Binding Target}" />
+                                </TextBlock>
+                                <TextBlock Text="{Binding Detail}" FontSize="11" Opacity="0.6"
+                                           TextWrapping="Wrap" Margin="0,2,0,0" />
+                                <TextBlock Text="{Binding TimeText}" FontSize="10" Opacity="0.4"
+                                           Margin="0,3,0,0" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <StackPanel x:Name="EmptyState" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Spacing="10" Visibility="Collapsed">
+                <FontIcon Glyph="&#xE9D9;" FontSize="36" Opacity="0.25" />
+                <TextBlock Text="这段时间还没有操作记录" Opacity="0.6" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <TextBlock x:Name="StatusText" FontSize="12" Opacity="0.6" VerticalAlignment="Center" />
+            <TextBlock x:Name="CountText" HorizontalAlignment="Right" VerticalAlignment="Center"
+                       FontSize="12" Opacity="0.6" />
+        </Grid>
+    </Grid>
+</Page>
