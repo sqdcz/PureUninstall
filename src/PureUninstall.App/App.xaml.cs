@@ -1,5 +1,7 @@
 using System.Runtime.InteropServices;
 using Microsoft.UI.Xaml;
+using PureUninstall.Core.Models;
+using PureUninstall.Core.Services;
 
 namespace PureUninstall.App;
 
@@ -32,12 +34,20 @@ public partial class App : Application
     {
         try
         {
+            // 先打开日志：后面任何操作都能留下痕迹，崩溃时也有据可查
+            OperationLog.IsElevated = Core.Services.AdminHelper.IsAdministrator();
+            OperationLog.Write(LogCategory.App, "程序启动",
+                $"v{typeof(App).Assembly.GetName().Version}",
+                LogResult.Info,
+                $"会话 {OperationLog.SessionId}，管理员={(OperationLog.IsElevated ? "是" : "否")}");
+
             MainWindow = new MainWindow();
             MainWindow.Activate();
         }
         catch (Exception ex)
         {
             LogException(ex);
+            OperationLog.Write(LogCategory.App, "启动失败", "", LogResult.Failed, ex.Message);
             ShowFatal(ex);
         }
     }
