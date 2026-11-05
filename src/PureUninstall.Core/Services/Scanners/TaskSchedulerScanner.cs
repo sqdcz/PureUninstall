@@ -120,9 +120,11 @@ public static class TaskSchedulerScanner
         try
         {
             var idx = item.Path.LastIndexOf('\\');
-            if (idx <= 0) return false;
-            var folderPath = item.Path[..idx];
+            if (idx < 0) return false;
+            // 根目录下的任务路径形如 "\Updater"，早先 idx<=0 直接返回 false，导致这类任务删不掉
+            var folderPath = idx == 0 ? "\\" : item.Path[..idx];
             var taskName = item.Path[(idx + 1)..];
+            if (string.IsNullOrEmpty(taskName)) return false;
             var folder = service.GetFolder(string.IsNullOrEmpty(folderPath) ? "\\" : folderPath);
             folder.DeleteTask(taskName, 0);
             return true;
