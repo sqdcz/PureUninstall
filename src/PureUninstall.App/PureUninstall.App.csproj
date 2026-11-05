@@ -9,7 +9,7 @@
     <LangVersion>latest</LangVersion>
     <RootNamespace>PureUninstall.App</RootNamespace>
     <AssemblyName>PureUninstall</AssemblyName>
-    <Version>0.1.2</Version>
+    <Version>0.2.0</Version>
     <ApplicationIcon>..\..\design\icons\app.ico</ApplicationIcon>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Platforms>x64</Platforms>
@@ -25,8 +25,17 @@
   </PropertyGroup>
 
   <!-- 商店版：dotnet build -p:StoreBuild=true（见 STORE.md） -->
+  <!-- 商店版：dotnet build -p:StoreBuild=true（见 STORE.md）
+       商店审核机器是干净的 Windows，没装 .NET 桌面运行时 —— 上一版就是因为只依赖
+       本机运行时被打回（10.2.4.1 软件依赖）。所以商店包必须把运行时和 WinAppSDK
+       都打进去，做到「装上就能跑」，不要求用户额外装任何东西。 -->
   <PropertyGroup Condition="'$(StoreBuild)'=='true'">
     <WindowsPackageType>MSIX</WindowsPackageType>
+    <!-- .NET 运行时必须内置：审核机没有 .NET 桌面运行时，上一版就因此被驳回（10.2.4.1）。
+         WinAppSDK 走框架包依赖（商店标准做法），MinVersion 已在 manifest 里放宽，
+         避免审核机框架包偏旧导致装不上。 -->
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
     <EnableMsixTooling>true</EnableMsixTooling>
     <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
