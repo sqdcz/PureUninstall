@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using PureUninstall.App.Pages;
 using PureUninstall.App.Services;
+using PureUninstall.Core.Models;
 using PureUninstall.Core.Services;
 using Windows.Graphics;
 
@@ -63,12 +64,29 @@ public sealed partial class MainWindow : Window
         {
             "batch" => typeof(BatchPage),
             "backups" => typeof(BackupsPage),
+            "trace" => typeof(TracePage),
+            "persist" => typeof(PersistencePage),
+            "guard" => typeof(GuardPage),
+            "logs" => typeof(LogsPage),
             "settings" => typeof(SettingsPage),
             _ => typeof(AppsPage),
         };
 
-        if (ContentFrame.CurrentSourcePageType != page)
-            ContentFrame.Navigate(page);
+        if (ContentFrame.CurrentSourcePageType == page) return;
+
+        // 页面构造失败时 Frame.Navigate 会返回 false 并静默保留旧页面，
+        // 界面看起来像"点了没反应"，必须记下来才能排查
+        try
+        {
+            bool ok = ContentFrame.Navigate(page);
+            if (!ok)
+                OperationLog.Write(LogCategory.App, "页面导航失败", page.Name, LogResult.Failed,
+                    "Frame.Navigate 返回 false");
+        }
+        catch (Exception ex)
+        {
+            OperationLog.Write(LogCategory.App, "页面导航异常", page.Name, LogResult.Failed, ex.ToString());
+        }
     }
 
     private void OnRestartAdmin(object sender, RoutedEventArgs e)
