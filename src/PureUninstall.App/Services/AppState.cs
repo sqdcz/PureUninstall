@@ -1,4 +1,5 @@
 using PureUninstall.Core.Models;
+using PureUninstall.Core.Services.Guard;
 
 namespace PureUninstall.App.Services;
 
@@ -6,6 +7,9 @@ namespace PureUninstall.App.Services;
 public static class AppState
 {
     public static AppSettings Settings { get; set; } = SettingsService.Load();
+
+    /// <summary>安装监控单例：挂在全局，切页面也继续跑。</summary>
+    public static InstallGuard Guard { get; } = new();
 
     public static List<AppEntry> BatchQueue { get; } = new();
 
